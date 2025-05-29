@@ -105,7 +105,7 @@ const FloorConfiguration = () => {
 
   return (
     <div>
-      <div className="w-[1032px] m-5 border border-[#E4E4E4] rounded-xl overflow-hidden">
+      <div className="w-[1090px] m-5 border border-[#E4E4E4] rounded-xl overflow-hidden">
         <div className="p-2 flex items-center justify-between">
           <span className="text-[13px] font-medium text-[#404040] font-montserrat">
             Floor Configuration

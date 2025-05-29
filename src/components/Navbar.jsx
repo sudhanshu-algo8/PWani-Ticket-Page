@@ -4,7 +4,7 @@ import { IoSettingsSharp } from "react-icons/io5";
 import { MdHelp, MdKeyboardArrowDown } from "react-icons/md";
 import { PiSignOutFill } from "react-icons/pi";
 import { TbSettingsFilled } from "react-icons/tb";
-import {FaSearch} from 'react-icons/fa'
+import { FaSearch } from "react-icons/fa";
 import { IoIosSearch } from "react-icons/io";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,14 +15,13 @@ const Navbar = () => {
     <div className="shadow-md bg-white">
       <div className="flex items-center justify-between border-b p-2 border-[#E4E4E4]">
         <div className="flex items-center gap-x-1 my-auto">
-          <img src="/PwaniLogo.png" alt="Logo" width={30}/>{" "}
+          <img src="/PwaniLogo.png" alt="Logo" width={30} />
           <span className="text-[25px] font-medium text-[#ED1D23] font-montserrat">
             Pwani
           </span>
-          <span className="text-[26px] text-[#404040] font-montserrat">
-            {" "}
+          <span className="text-[26px] text-[#404040] font-montserrat font-light">
             |
-          </span>{" "}
+          </span>
           <span className="text-[25px] font-medium text-[#404040] font-montserrat">
             FG Warehousing
           </span>
@@ -38,7 +37,8 @@ const Navbar = () => {
             <span className="absolute left-3 text-2xl text-gray-400 flex items-center justify-center">
               <IoIosSearch />
             </span>
-          </div></div>
+          </div>
+        </div>
         <div className="flex gap-3">
           <span className="texl-[16px]">Good Afternoon!</span>
           <span>
@@ -60,7 +60,6 @@ const Navbar = () => {
             {isOpen && (
               <div className="absolute right-0 top-full mt-2 w-45 bg-white border border-gray-200 rounded shadow-md z-10">
                 <ul className="text-sm text-gray-700 p-2">
-                 
                   <li className="px-4 py-2 hover:bg-orange-200 cursor-pointer">
                     <span className="flex self-start items-center gap-2 ">
                       <PiSignOutFill />

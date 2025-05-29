@@ -5,11 +5,7 @@ const getAreaClass = (seatId) => {
   const num = parseInt(seatId?.slice(1), 10);
   if (!row || isNaN(num)) return "";
 
-  if (
-    ["A", "B", "C", "D", "E", "F", "G"].includes(row) &&
-    num >= 1 &&
-    num <= 6
-  )
+  if (["A", "B", "C", "D", "E", "F", "G"].includes(row) && num >= 1 && num <= 6)
     return "bg-red-100";
   if (
     (row === "A" && num >= 7 && num <= 20) ||
@@ -27,12 +23,13 @@ const getAreaClass = (seatId) => {
     (row === "J" && num >= 5 && num <= 6)
   )
     return "bg-green-100";
-  if (["H", "I", "J"].includes(row) && num >= 7 && num <= 19) return "bg-purple-100";
-  if (["H", "I", "J"].includes(row) && num >= 20 && num <= 25) return "bg-pink-100";
+  if (["H", "I", "J"].includes(row) && num >= 7 && num <= 19)
+    return "bg-purple-100";
+  if (["H", "I", "J"].includes(row) && num >= 20 && num <= 25)
+    return "bg-pink-100";
 
   return "";
 };
-
 
 const SectionGrid = ({ section, sectionIndex, onToggle }) => {
   // ... same as before including getAreaClass
@@ -112,11 +109,9 @@ const SeatMap = ({ sections, onToggle }) => {
             sectionIndex={idx}
             onToggle={onToggle}
           />
-          
+
           {/* Add a vertical spacer after row G */}
-          {section.label === "G" && (
-            <div className="h-1" /> 
-          )}
+          {section.label === "G" && <div className="h-1" />}
 
           <div className="text-center -mt-2.5 -mb-1.5">
             {/* Empty but preserved if you later want labels */}
@@ -126,6 +121,5 @@ const SeatMap = ({ sections, onToggle }) => {
     </div>
   );
 };
-
 
 export default SeatMap;

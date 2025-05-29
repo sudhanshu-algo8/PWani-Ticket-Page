@@ -4,7 +4,7 @@ import FloorConfiguration from "./FloorConfiguration";
 
 const Settings = () => {
   return (
-    <div className="flex bg-[#FAFAFA] h-screen gap-2">
+    <div className="flex bg-[#FAFAFA] h-screen gap-1">
       <Sidebar />
       <FloorConfiguration />
     </div>

@@ -8,8 +8,12 @@ const Sidebar = () => {
           Settings
         </div>
         <div className="flex flex-col border-t border-gray-400 text-[13px] font-medium text-[#404040] font-montserrat">
-          <span className="border-b border-[#cfcece] p-3 bg-[#d8ebfa] hover:bg-[#F8DAB5]">Floor Configuration</span>
-          <span className="border-b border-[#cfcece] p-3 hover:bg-[#F8DAB5]">User Management</span>
+          <span className="border-b border-[#cfcece] p-3 bg-[#d8ebfa] hover:bg-[#F8DAB5]">
+            Floor Configuration
+          </span>
+          <span className="border-b border-[#cfcece] p-3 hover:bg-[#F8DAB5]">
+            User Management
+          </span>
         </div>
       </div>
     </div>
