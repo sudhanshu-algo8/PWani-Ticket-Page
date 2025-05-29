@@ -6,100 +6,144 @@ const getAreaClass = (seatId) => {
   if (!row || isNaN(num)) return "";
 
   if (["A", "B", "C", "D", "E", "F", "G"].includes(row) && num >= 1 && num <= 6)
-    return "bg-red-100";
+    return "";
   if (
     (row === "A" && num >= 7 && num <= 20) ||
     (["B", "C", "D", "E", "F", "G"].includes(row) && num >= 7 && num <= 19)
   )
-    return "bg-blue-100";
+    return "";
   if (
     (row === "A" && num >= 21 && num <= 26) ||
-    (["B", "C", "D", "E", "F", "G"].includes(row) && num >= 20 && num <= 25)
+    (["B", "C", "D", "E", "F", "G"].includes(row) && num >= 20 && num <= 26)
   )
-    return "bg-yellow-100";
+    return "";
   if (
     (row === "H" && num >= 1 && num <= 6) ||
     (row === "I" && num >= 1 && num <= 6) ||
     (row === "J" && num >= 5 && num <= 6)
   )
-    return "bg-green-100";
-  if (["H", "I", "J"].includes(row) && num >= 7 && num <= 19)
-    return "bg-purple-100";
-  if (["H", "I", "J"].includes(row) && num >= 20 && num <= 25)
-    return "bg-pink-100";
+    return "";
+  if (["H", "I", "J"].includes(row) && num >= 7 && num <= 19) return "";
+  if (["H", "I", "J"].includes(row) && num >= 20 && num <= 26) return "";
 
   return "";
 };
 
-const SectionGrid = ({ section, sectionIndex, onToggle }) => {
-  // ... same as before including getAreaClass
+const isBlankSeat = (seatId) => {
+  if (!seatId) return false;
+  const row = seatId[0];
+  const num = parseInt(seatId.slice(1), 10);
 
+  // Specific blanks
+  if (row === "A" && [14, 15, 16].includes(num)) return true;
+  if (["B", "C", "D", "E", "F", "G", "H", "I", "J"].includes(row)) {
+    if ([7, 8, 20, 21].includes(num)) return true;
+  }
+  if (row === "J" && [1, 2, 3, 4].includes(num)) return true;
+  if (row === "B" && [14, 15, 16].includes(num)) return true;
+
+  return false;
+};
+
+const buildGlobalVisualIndexMap = (sections) => {
+  const visualIndexMap = {};
+  let visualIndex = 0;
+
+  sections.forEach((section) => {
+    section.seats.forEach((seat) => {
+      if (seat.id) {
+        visualIndexMap[seat.id] = visualIndex++;
+      }
+    });
+  });
+
+  return visualIndexMap;
+};
+
+const SectionGrid = ({
+  section,
+  sectionIndex,
+  onToggle,
+  visualIndexMap,
+  startSeat,
+  endSeat,
+}) => {
   const totalCols = 29;
-  const isRowA = section.label === "A";
   const seatCount = section.seats.length;
-
-  // (You can keep your getAreaClass from before here)
 
   return (
     <div className="grid grid-cols-29 w-full gap-x-2 gap-y-2">
       {section.seats.map((seat, seatIdx) => {
         const seatId = seat?.id;
-        const isAfterA13 = isRowA && seatId === "A13";
-        const isAfter6 = !isRowA && seatId?.endsWith("06");
-        const isAfter19 = !isRowA && seatId?.endsWith("19");
 
-        const isBlankSeat =
-          (section.label === "J" &&
-            ["J01", "J02", "J03", "J04"].includes(seatId)) ||
-          (section.label === "B" && ["B12", "B13", "B14"].includes(seatId));
+        if (isBlankSeat(seatId)) {
+          return (
+            <div
+              key={`blank-${section.label}-${seatIdx}`}
+              className="w-8 h-6"
+              aria-hidden="true"
+            />
+          );
+        }
+
+        // Check if this seat is start or end seat
+        const isStart =
+          startSeat?.sectionIndex === sectionIndex &&
+          startSeat?.seatIndex === seatIdx;
+        const isEnd =
+          endSeat?.sectionIndex === sectionIndex &&
+          endSeat?.seatIndex === seatIdx;
+
+        // Base styles from your code
+        let backgroundColor =
+          seat.selected && seat.color ? seat.color : seat.color;
+        let borderColor = seat.selected && seat.color ? seat.color : "#d1d5db";
+        let textColor = seat.selected ? "text-white" : "text-gray-400";
+
+        // Override styles for start/end seat highlights
+        if (isStart) {
+          backgroundColor = "#22c55e"; // green background
+          borderColor = "#16a34a"; // darker green border
+          textColor = "text-white";
+        } else if (isEnd) {
+          backgroundColor = "#ef4444"; // red background
+          borderColor = "#b91c1c"; // darker red border
+          textColor = "text-white";
+        }
 
         return (
-          <React.Fragment key={seatId}>
-            {isBlankSeat ? (
-              <div className="w-8 h-6" />
-            ) : (
-              <button
-                className={`border rounded w-8 h-7 text-[13px] font-medium ${getAreaClass(
-                  seatId
-                )} ${
-                  seat.selected
-                    ? "border-green-500 text-green-600"
-                    : "border-gray-300 text-gray-400"
-                }`}
-                onClick={() => onToggle(sectionIndex, seatIdx)}
-              >
-                {seatId}
-              </button>
-            )}
-
-            {isAfterA13 &&
-              Array.from({ length: 3 }).map((_, i) => (
-                <div key={`gap-A13-${i}`} />
-              ))}
-
-            {isAfter6 &&
-              Array.from({ length: 2 }).map((_, i) => (
-                <div key={`gap-06-${seatId}-${i}`} />
-              ))}
-
-            {isAfter19 &&
-              Array.from({ length: 2 }).map((_, i) => (
-                <div key={`gap-19-${seatId}-${i}`} />
-              ))}
-          </React.Fragment>
+          <button
+            key={seatId}
+            className={`border rounded w-8 h-7 text-[13px] font-medium ${getAreaClass(
+              seatId
+            )} ${textColor}`}
+            style={{
+              backgroundColor,
+              borderColor,
+              transition: "all 0.3s ease",
+            }}
+            onClick={() =>
+              onToggle(sectionIndex, seatIdx, visualIndexMap[seatId])
+            }
+          >
+            {seatId}
+          </button>
         );
       })}
 
-      {Array.from({
-        length: totalCols - seatCount - (isRowA ? 3 : 4),
-      }).map((_, i) => (
+      {Array.from({ length: totalCols - seatCount }).map((_, i) => (
         <div key={`filler-${section.label}-${i}`} />
       ))}
     </div>
   );
 };
 
-const SeatMap = ({ sections, onToggle }) => {
+const SeatMap = ({ sections, onToggle, startSeat, endSeat }) => {
+  const visualIndexMap = React.useMemo(
+    () => buildGlobalVisualIndexMap(sections),
+    [sections]
+  );
+
   return (
     <div className="p-1 w-full space-y-3 text-[13px]">
       {sections.map((section, idx) => (
@@ -108,14 +152,12 @@ const SeatMap = ({ sections, onToggle }) => {
             section={section}
             sectionIndex={idx}
             onToggle={onToggle}
+            visualIndexMap={visualIndexMap}
+            startSeat={startSeat}
+            endSeat={endSeat}
           />
-
-          {/* Add a vertical spacer after row G */}
           {section.label === "G" && <div className="h-1" />}
-
-          <div className="text-center -mt-2.5 -mb-1.5">
-            {/* Empty but preserved if you later want labels */}
-          </div>
+          <div className="text-center -mt-2.5 -mb-1.5" />
         </React.Fragment>
       ))}
     </div>
