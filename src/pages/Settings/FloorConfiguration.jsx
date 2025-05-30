@@ -478,15 +478,19 @@ const FloorConfiguration = () => {
               type="text"
               placeholder="Area Name"
               value={areaName}
+              required
               onChange={(e) => setAreaName(e.target.value)}
               className="border border-gray-300 p-2 w-full rounded mb-4"
             />
+            <span className="flex my-auto items-center justify-between mb-10">
+              Choose Color:
             <input
               type="color"
               value={areaColor}
               onChange={(e) => setAreaColor(e.target.value)}
-              className="w-full h-10 mb-4 cursor-pointer"
+              className="w-20 h-10 cursor-pointer"
             />
+            </span>
             <div className="flex justify-end gap-3">
               <button
                 onClick={() => {
